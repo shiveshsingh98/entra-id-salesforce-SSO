@@ -58,11 +58,11 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
  
         // Role-to-group mapping 
         Map<String, String> roleToGroupIdMap = new Map<String, String>{
-            'User' => 'acdefghijklmnopqrstuvwxyz',
-            'Admin' => 'acdefghijklmnopqrstuvwxyz',
-            'Super Admin' => 'acdefghijklmnopqrstuvwxyz',
-            'Dealer Admin' => 'group-id-dealer-admin',
-            'Partners Portal User' => 'group-id-partners-portal'
+            'User' => 'abcdefghijklmnopqrstuvwxyz',
+            'Admin' => 'abcdefghijklmnopqrstuvwxyz',
+            'Super Admin' => 'abcdefghijklmnopqrstuvwxyz',
+            'Dealer Admin' => 'abcdefghijklmnopqrstuvwxyz',
+            'Partners Portal User' => 'abcdefghijklmnopqrstuvwxyz'
                     };
  
         // Process invitation
