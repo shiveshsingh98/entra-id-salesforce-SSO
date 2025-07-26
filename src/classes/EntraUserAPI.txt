@@ -87,8 +87,8 @@ public class EntraUserAPI {
      	Map<String, Object> payload = new Map<String, Object>{
          	'givenName' => firstName,
          	'surname' => lastName,
-         	'extension_595e3ad8ed704d33872b0cbc3ae58901_customernumber' => customerNumber,
-         	'extension_595e3ad8ed704d33872b0cbc3ae58901_sfid2' => sfid2,
+         	'extension_595ee58901_customernumber' => customerNumber,
+         	'extension_595ee58901_sfid2' => sfid2,
          	'accountEnabled' => true
      	};
 
