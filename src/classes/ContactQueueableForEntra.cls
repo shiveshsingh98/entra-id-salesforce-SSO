@@ -39,7 +39,7 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
             System.debug(LoggingLevel.WARN, 'No contacts to process.');
             return;
         }
-        System.debug('Shivesh All contactId '+allContactIds);
+
  
         Map<Id, Contact> contactMap = new Map<Id, Contact>(
             [SELECT Id, Email, FirstName, LastName, Contact_Roles__c, SSO_Status__c,Customer_Number_Text__c
@@ -49,8 +49,7 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
  
         String token;
         try {
-            token = EntraSSOService.getAccessToken();
-            System.debug('Shivesh Access token present in execute Method Queueable '+token);
+            token = EntraSSOService.getAccessToken();            
         } catch (Exception e) {
             updateSSOStatus(contactMap.values(), 'Token error: ' + e.getMessage());
             return;
@@ -72,8 +71,7 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
             processedContacts.add(con.Id);
  
             try {
-                String userId = EntraUserAPI.getUserIdByEmail(con.Email, token);
-                System.debug('Shivesh Get userId for Invitation '+userId);
+                String userId = EntraUserAPI.getUserIdByEmail(con.Email, token);               
                 if (userId == null) {
                     // Create Guest User and update attributes
                     userId = EntraUserAPI.createGuestUser(
@@ -86,7 +84,6 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
                         con.Id
                     );
                     con.SSO_Status__c = 'Invitation Sent';
-                    System.debug('Shivesh userId After GuestUser Creation '+userId);
                 } else {
                     // User already exists, no need to send invitation
                     con.SSO_Status__c = 'User Already Exists';
@@ -105,7 +102,6 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
             processedContacts.add(con.Id);
             try {
                 String userId = EntraUserAPI.getUserIdByEmail(con.Email, token);
-                System.debug('Shivesh Get userId for Reactivation ' + userId);
                 if (userId != null) {
                     EntraUserAPI.activateUser(userId, token);
                     con.SSO_Status__c = 'User Reactivated';
@@ -139,7 +135,6 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
  
             try {
                 String userId = EntraUserAPI.getUserIdByEmail(con.Email, token);
-                System.debug('Shivesh Get userId for Deactivation '+userId);
                 if (userId != null) {
                     EntraUserAPI.deactivateUser(userId, token);
                     con.SSO_Status__c = 'Deactivated';
@@ -159,15 +154,12 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
  
             try {
                 String userId = EntraUserAPI.getUserIdByEmail(con.Email, token);
-                System.debug('Shivesh Get userId for Role update '+userId);
                 if (userId == null) {
                     con.SSO_Status__c = 'Role update failed: User not found';
                     continue;
                 }              
-                String newRolesString = roleUpdateContactIdsToRoles.get(contactId);
-                System.debug('Shivesh newRolesString '+newRolesString);               
+                String newRolesString = roleUpdateContactIdsToRoles.get(contactId);               
                 String oldRolesString = roleUpdateContactIdsToOldRoles.get(contactId);
-                System.debug('Shivesh oldRolesString '+oldRolesString);
                updateUserRoles(con, userId, newRolesString, oldRolesString, roleToGroupIdMap, token);
             } catch (Exception e) {
                 con.SSO_Status__c = 'Error: ' + e.getMessage();
@@ -186,15 +178,12 @@ public class ContactQueueableForEntra implements Queueable, Database.AllowsCallo
         if (oldRolesString != null) {
             oldRoles.addAll(oldRolesString.split(';'));
         }
-        System.debug('Shivesh Old roles: ' + oldRoles);
-        System.debug('Shivesh New roles: ' + newRoles);
+
         // Determine roles to add or remove
         Set<String> rolesToAdd = new Set<String>(newRoles);
         rolesToAdd.removeAll(oldRoles);
-        System.debug('Shivesh Roles to add: ' + rolesToAdd);
         Set<String> rolesToRemove = new Set<String>(oldRoles);
         rolesToRemove.removeAll(newRoles);
-        System.debug('Shivesh Roles to remove: ' + rolesToRemove);
         // Add new group memberships
         for (String role : rolesToAdd) {
             if (roleToGroupIdMap.containsKey(role)) {

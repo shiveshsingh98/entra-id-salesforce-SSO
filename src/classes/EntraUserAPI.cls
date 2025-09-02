@@ -16,11 +16,8 @@ public class EntraUserAPI {
 
      	try {
          	HttpResponse res = new Http().send(req);
-         	System.debug('Shivesh response GetUserByEmail '+res);
-     	  System.debug('Shivesh response GetUserByEmail resBody '+res.getBody());
          	if (res.getStatusCode() == 200) {
              	Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
-             	System.debug('Shivesh response email '+result);
              	List<Object> users = (List<Object>) result.get('value');
              	if (!users.isEmpty()) {
                  	return (String)((Map<String, Object>) users[0]).get('id');
@@ -58,8 +55,6 @@ public class EntraUserAPI {
          	if (response.getStatusCode() == 201) {
              	Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
              	Map<String, Object> invitedUser = (Map<String, Object>) responseBody.get('invitedUser');
-             	System.debug('Shivesh responseBody for create guestUser '+responseBody);
-             	System.debug('Shivesh invitedUser for create guestUser '+invitedUser);
              	String userId = (String) invitedUser.get('id');
                  
              	// Update user attributes
@@ -116,7 +111,6 @@ public class EntraUserAPI {
 
      	try {
          	HttpResponse res = new Http().send(req);
-         	System.debug('Shivesh response activateUser '+res);
          	if (res.getStatusCode() >= 400) {
              	System.debug(LoggingLevel.ERROR, 'Failed to activate user: ' + userId + ', Status: ' + res.getStatusCode() + ', Body: ' + res.getBody());
              	throw new CalloutException('Unexpected status code: ' + res.getStatusCode() + ', ' + res.getBody());
@@ -137,7 +131,6 @@ public class EntraUserAPI {
 
      	try {
          	HttpResponse res = new Http().send(req);
-         	System.debug('Shivesh response deactivateUser '+res);
          	if (res.getStatusCode() >= 400) {
              	System.debug(LoggingLevel.ERROR, 'Failed to deactivate user: ' + userId + ', Status: ' + res.getStatusCode() + ', Body: ' + res.getBody());
              	throw new CalloutException('Unexpected status code: ' + res.getStatusCode() + ', ' + res.getBody());
@@ -161,7 +154,6 @@ public class EntraUserAPI {
 
      	try {
          	HttpResponse res = new Http().send(req);
-         	System.debug('Shivesh response assignUserToGroup '+res);
          	if (res.getStatusCode() >= 400) {
              	System.debug(LoggingLevel.ERROR, 'Failed to assign user to group: ' + userId + ', Group: ' + groupId + ', Status: ' + res.getStatusCode() + ', Body: ' + res.getBody());
              	throw new CalloutException('Unexpected status code: ' + res.getStatusCode() + ', ' + res.getBody());
@@ -181,7 +173,6 @@ public class EntraUserAPI {
 
      	try {
          	HttpResponse res = new Http().send(req);
-         	System.debug('Shivesh response removeUserFromGroup '+res);
          	if (res.getStatusCode() >= 400) {
              	System.debug(LoggingLevel.ERROR, 'Failed to remove user from group: ' + userId + ', Group: ' + groupId + ', Status: ' + res.getStatusCode() + ', Body: ' + res.getBody());
              	throw new CalloutException('Unexpected status code: ' + res.getStatusCode() + ', ' + res.getBody());

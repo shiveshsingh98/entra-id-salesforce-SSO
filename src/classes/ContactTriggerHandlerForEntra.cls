@@ -17,7 +17,6 @@
      	for (Contact con : newList) {
          	if (con.AccountId != null) {
              	accountId.add(con.AccountId);
-             	System.debug('Shivesh Account Id Added');
          	}
      	}
 
@@ -42,7 +41,6 @@
          	Set<String> rolesofcontact = new Set<String>();
          	if (con.Contact_Roles__c != null) {
              	rolesofcontact.addAll(con.Contact_Roles__c.split(';'));
-             	System.debug('Shivesh Roles of Contact ' + rolesofcontact);
          	}
 
          	Account acc = accountMap.get(con.AccountId);
@@ -55,12 +53,10 @@
              	acc.Accumulator_Number__c != '612' &&
              	conHomeownerRecordType != con.RecordTypeId
          	);
-         	System.debug('Shivesh isEligible '+isEligible);
          	if (!isEligible) continue;
 
          	// Define oldCon for use in update context
          	Contact oldCon = isUpdate ? oldMap.get(con.Id) : null;
-         	System.debug('Shives oldCon '+oldCon);
 
          	// Invitation or reactivation check
          	if (con.Partners_Portal_Status__c == 'Active' &&
